@@ -8,7 +8,7 @@ import {
 export default function ComposeScreen() {
   return (
     <View style={styles.container}>
-      <Text>メモ作成画面Ï</Text>
+      <Text>メモ作成画面</Text>
     </View>
   );
 }
