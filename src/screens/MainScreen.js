@@ -1,9 +1,16 @@
-import { StyleSheet, Text, View, FlatList } from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  View,
+  FlatList
+} from 'react-native';
 import {
   Title,
-  List
+  List,
+  FAB
 } from 'react-native-paper';
 import format from 'date-fns/format';
+import { useNavigation } from '@react-navigation/native';
 
 const memos = [
   {
@@ -33,6 +40,10 @@ function convertCreatedAt(createdAt) {
 }
 
 export default function Main() {
+  const navigation = useNavigation();
+  const onPressAdd = () => {
+    navigation.navigate('Compose');
+  }
   return (
     <View style={styles.container}>
       <Title>ここはメイン画面です</Title>
@@ -51,6 +62,11 @@ export default function Main() {
           );
         }}
       />
+      <FAB
+      icon="plus"
+      onPress={onPressAdd}
+      style={styles.fab}
+      />
     </View>
   );
 }
@@ -61,5 +77,10 @@ const styles = StyleSheet.create({
   },
   list: {
     flex: 1
+  },
+  fab: {
+    position: 'absolute',
+    right: 16,
+    bottom: 16
   }
 });
