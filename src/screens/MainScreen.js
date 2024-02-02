@@ -3,39 +3,19 @@ import {
   StyleSheet,
   Text,
   View,
-  FlatList
+  FlatList,
+  Button,
+  TouchableOpacity
 } from 'react-native';
 import {
   Title,
   List,
   FAB
 } from 'react-native-paper';
+import { SwipeListView } from 'react-native-swipe-list-view';
 import format from 'date-fns/format';
 import { useNavigation } from '@react-navigation/native';
-import { loadAll } from '../store/Store';
-
-// const memos = [
-//   {
-//     text: "メモメモメモ",
-//     createdAt: 1585574700000, // 2020.03.30 22:25
-//   },
-//   {
-//     text: "メモメモメモ",
-//     createdAt: 1585567500000, // 2020.03.30 20:25
-//   },
-//   {
-//     text: "長いメモメモメモメモメモメモメモメモメモメモメモメモメモメモ",
-//     createdAt: 1585459500000, // 2020.03.29 14:25
-//   },
-//   {
-//     text: "メモメモメモ",
-//     createdAt: 1585369500000, // 2020.03.28 13:25
-//   },
-//   {
-//     text: "メモメモメモ",
-//     createdAt: 1585275900000, // 2020.03.27 11:25
-//   },
-// ];
+import { loadAll, removeItem } from '../store/Store';
 
 function convertCreatedAt(createdAt) {
   return format(createdAt, 'yyyy.MM.dd HH:mm');
@@ -58,16 +38,39 @@ export default function Main() {
     navigation.navigate('Compose');
   }
 
+  const deleteButton = ({ item }) => {
+    return (
+      <View>
+        <TouchableOpacity
+          style={{
+            alignSelf: "flex-end",
+            width: 75,
+            height: 70,
+            backgroundColor: "#CC3333",
+            padding: 10
+          }}
+          onPress={async () => {
+            await removeItem(String(item.createdAt));
+            const newMemos = await loadAll();
+            setMemos(newMemos);
+          }}
+          key={item.createdAt}
+        >
+          <Text style={{ color: "white", textAlign: "center" }}>Delete</Text>
+        </TouchableOpacity>
+      </View>
+    );
+  }
+
   return (
     <View style={styles.container}>
       <Title>ここはメイン画面です</Title>
-      <FlatList
-        style={styles.list}
+      <SwipeListView
         data={memos}
-        keyExtractor={item => `${item.createdAt}-memo-item`}
         renderItem={({ item }) => {
           return (
             <List.Item
+              style={{ backgroundColor: 'white' }}
               title={item.text}
               titleNumberOfLines={5} // 5行までは折り返して画面内に収まるようにする
               description={`作成日時: ${convertCreatedAt(item.createdAt)}`}
@@ -75,11 +78,15 @@ export default function Main() {
             />
           );
         }}
+        renderHiddenItem={deleteButton}
+        rightOpenValue={-75}
+        disableRightSwipe={true}
+        keyExtractor={item => item.createdAt}
       />
       <FAB
-      icon="plus"
-      onPress={onPressAdd}
-      style={styles.fab}
+        icon="plus"
+        onPress={onPressAdd}
+        style={styles.fab}
       />
     </View>
   );

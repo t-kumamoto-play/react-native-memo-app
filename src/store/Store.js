@@ -19,3 +19,7 @@ export const loadAll = async () => {
   const data = entryList.map(entry => JSON.parse(entry[1]));
   return data;
 }
+
+export const removeItem = async (key) => {
+  return await AsyncStorage.removeItem(key);
+}
