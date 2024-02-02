@@ -7,11 +7,15 @@ import {
   Platform
 } from 'react-native';
 import { TextInput, Button } from 'react-native-paper';
+import { save } from '../store/Store';
+import { useNavigation } from '@react-navigation/native';
 
 export default function ComposeScreen() {
   const [text, setText] = useState("");
-  const onPressSave = (e) => {
-    // TODO
+  const navigation = useNavigation();
+  const onPressSave = async (e) => {
+    await save(text, Date.now());
+    navigation.goBack();
   }
 
   return (
