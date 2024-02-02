@@ -21,7 +21,7 @@ export default function ComposeScreen() {
 
     <KeyboardAvoidingView style={styles.container}>
       <TextInput
-        style={{ marginBottom: 16 }}
+        style={styles.textInput}
         mode="outlined"
         placeholder="メモを入力してください"
         multiline
@@ -41,5 +41,9 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 16
+  },
+  textInput: {
+    marginBottom: 16,
+    paddingVertical: 10
   }
 });
